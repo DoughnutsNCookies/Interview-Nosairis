@@ -7,10 +7,10 @@ env_vars = dotenv_values('../.env')
 
 try:
 	conn = mysql.connector.connect(
-			host=env_vars['DB_HOST'],
-			port= env_vars['DB_PORT'],
-			user=env_vars['DB_USER'],
-			password=env_vars['DB_PASSWORD']
+		host=env_vars['DB_HOST'],
+		port= env_vars['DB_PORT'],
+		user=env_vars['DB_USER'],
+		password=env_vars['DB_PASSWORD']
 	)
 	cursor = conn.cursor()
 	database_name = env_vars['DB_NAME']
@@ -34,6 +34,6 @@ except mysql.connector.Error as err:
 
 finally:
 	if conn.is_connected():
-			cursor.close()
-			conn.close()
-			print("MySQL connection closed")
+		cursor.close()
+		conn.close()
+		print("MySQL connection closed")
