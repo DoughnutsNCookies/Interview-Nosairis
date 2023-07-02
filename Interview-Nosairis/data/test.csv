@@ -1,0 +1,6 @@
+SW(Switch Lable),T1(Terminal 1),T2(Terminal 2),T3(Terminal 3),T4(Terminal 4),T5(Terminal 5),TS(Unix Timestamp)
+S1,1,1,1,1,1,1574899200
+S2,1,1,1,1,1,1574899200
+S3,0,0,0,0,0,1574899200
+S1,1,1,1,1,1,1574899320
+S2,0,0,1,0,0,1574899320
