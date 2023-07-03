@@ -35,4 +35,5 @@ def generate_plot(statuses, page):
 				plt.grid(True)
 				plt.savefig(f"media/{switch_label}-plot.png")
 				plt.clf()
+		plt.close()
 		return 1
