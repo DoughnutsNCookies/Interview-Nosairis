@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-		'edit'
+	'edit.apps.EditConfig'
 ]
 
 MIDDLEWARE = [
@@ -82,10 +82,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': env_vars['DB_NAME'],
-				'USER': env_vars['DB_USER'],
-				'PASSWORD': env_vars['DB_PASSWORD'],
-				'HOST': env_vars['DB_HOST'],
-				'PORT': env_vars['DB_PORT'],
+        'USER': env_vars['DB_USER'],
+        'PASSWORD': env_vars['DB_PASSWORD'],
+        'HOST': env_vars['DB_HOST'],
+        'PORT': env_vars['DB_PORT'],
     }
 }
 
