@@ -23,14 +23,14 @@ def read(request):
 			"id", "switch_label", "T1", "T2", "T3", "T4", "T5", "TS"
 		)
 		try:
-			page = int(request.GET.getlist("page")[0]) - 1
-			if (page < 0):
+			page = int(request.GET.getlist("page")[0])
+			if (page <= 0):
 				raise ValueError
 		except ValueError:
 			return JsonResponse({"error": "Invalid page number - page must be 1 or more"}, status=400)
 		except IndexError:
 			page = 1
-		if generate_plot(statuses, page):
+		if generate_plot(statuses, page - 1):
 			image_paths = ["media/S1-plot.png", "media/S2-plot.png", "media/S3-plot.png"]
 			serialized_images = [encode_image(image_path) for image_path in image_paths]
 			response_data = {
