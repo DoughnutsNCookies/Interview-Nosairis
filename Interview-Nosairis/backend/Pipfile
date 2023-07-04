@@ -5,9 +5,11 @@ name = "pypi"
 
 [packages]
 django = "*"
-mysqlclient = "*"
+pymysql = "*"
 python-dotenv = "*"
+django-cors-headers = "*"
 matplotlib = "*"
+cryptography = "*"
 
 [dev-packages]
 
