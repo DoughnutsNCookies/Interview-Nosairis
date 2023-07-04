@@ -1,38 +1,16 @@
 import { NavigateButtonProps } from "@/interfaces/NavigateButtonProps";
 import { useEffect, useState } from "react";
+import { getGraphData } from "./helpers/getGraphData";
 
 export default function Home() {
   return (
-    <main className=" bg-blue-950">
-      <div>
-        <Graphs />
-      </div>
+    <main className="bg-blue-950">
+      <Graphs />
+      <hr className="border-2"/>
+      <Alerts />
     </main>
   );
 }
-
-const getGraphData = async (page: number) => {
-  try {
-    const response = await fetch("http://localhost:8000/switch_status?page=" + page, {
-      method: "GET",
-    });
-    if (response.ok) {
-      const data = await response.json();
-      const image_list: string[] = data.images;
-      const images = image_list.map((imageData) => {
-        const image = new Image();
-        image.src = `data:image/png;base64,${imageData}`;
-        return image;
-      });
-      return images;
-    } else {
-      console.error("Bad response");
-    }
-  } catch (error) {
-    console.error(error);
-  }
-  return [];
-};
 
 const Graphs = () => {
   const [graphData, setGraphData] = useState<HTMLImageElement[]>([]);
@@ -52,8 +30,18 @@ const Graphs = () => {
     }
   };
 
+  const NavigateButton = (props: NavigateButtonProps) => {
+    const { forward, onClick } = props;
+  
+    return (
+      <button className="border-2 border-white rounded-md py-1 px-4" onClick={onClick}>
+        {forward ? "Forward Hour" : "Previous Hour"}
+      </button>
+    );
+  };
+
   return (
-    <div>
+    <div className="h-screen">
       <div className="py-4 flex flex-col items-center">
         {graphData.map((image, index) => (
           <img
@@ -78,12 +66,6 @@ const Graphs = () => {
   );
 };
 
-const NavigateButton = (props: NavigateButtonProps) => {
-  const { forward, onClick } = props;
-
-  return (
-    <button className="border-2 border-white rounded-md py-1 px-4" onClick={onClick}>
-      {forward ? "Forward Hour" : "Previous Hour"}
-    </button>
-  );
-};
+const Alerts = () => {
+  return (<div className="h-screen">Alert</div>);
+}
