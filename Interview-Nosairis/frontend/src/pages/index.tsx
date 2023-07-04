@@ -1,6 +1,7 @@
 import { NavigateButtonProps } from "@/interfaces/NavigateButtonProps";
 import { useEffect, useState } from "react";
 import { getGraphData } from "./helpers/getGraphData";
+import { AlertData } from "@/interfaces/AlertData";
 
 export default function Home() {
   return (
@@ -46,19 +47,19 @@ const Graphs = () => {
   };
 
   return (
-    <div className="h-screen">
+    <div className="h-[940px]">
       <h1 className="text-center text-4xl pt-4 pb-2">Graph Chart</h1>
       <div className="py-4 flex flex-col items-center">
         {graphData.map((image, index) => (
           <img
-            className="px-5 max-h-[260px]"
+            className="px-5 max-h-[240px]"
             key={index}
             src={image.src}
             alt={`Image ${index}`}
           />
         ))}
       </div>
-      <div className=" flex flex-row justify-center gap-x-10 pb-5">
+      <div className=" flex flex-row justify-center gap-x-10 pb-6 pt-4">
         <NavigateButton
           forward={false}
           onClick={() => handlePageChange(false)}
@@ -68,11 +69,6 @@ const Graphs = () => {
     </div>
   );
 };
-
-interface AlertData {
-  switch_label: string;
-  time: string;
-}
 
 const Alerts = () => {
   const [alertData, setAlertData] = useState<AlertData[]>([]);
@@ -102,7 +98,7 @@ const Alerts = () => {
   return (
     <div className="h-screen px-10">
       <h1 className="text-center text-4xl py-10">Alert Page</h1>
-      <div className="max-h-[750px] overflow-y-auto border-2">
+      <div className="h-[80%] overflow-y-auto border-2">
         <table className="w-full">
           <thead className="border-2">
             <tr>
@@ -129,5 +125,81 @@ const Alerts = () => {
 };
 
 const Edits = () => {
-  return <div className="h-screen">Edit Page</div>;
+  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [selectedStatus, setSelectedStatus] = useState<number>(0);
+  const [selectedSwitch, setSelectedSwitch] = useState<string>("S1");
+  const [selectedTime, setSelectedTime] = useState<string>("");
+
+  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedDate(event.target.value);
+  };
+
+  const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedStatus(parseInt(event.target.value));
+  };
+
+  const handleSwitchChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedSwitch(event.target.value);
+  };
+
+  const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedTime(event.target.value);
+  };
+
+  const handleSubtmit = async () => {
+    if (selectedSwitch === "" || selectedDate === "" || selectedTime === "")
+      return console.log("Please fill in all fields");
+    const data = {
+      switch_label: selectedSwitch,
+      T1: selectedStatus,
+      T2: selectedStatus,
+      T3: selectedStatus,
+      T4: selectedStatus,
+      T5: selectedStatus,
+      TS: new Date(selectedDate + " " + selectedTime).getTime() / 1000,
+    };
+    try {
+      const response = await fetch("http://localhost:8000/switch_status/", {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <div className="h-screen px-36">
+      <h1 className="text-center text-4xl py-10">Edit Page</h1>
+        <div className="flex flex-col">
+          <span className="text-2xl">Switch Label:</span>
+          <select className="text-black text-xl" value={selectedSwitch} onChange={handleSwitchChange}>
+            <option value="S1">S1</option>
+            <option value="S2">S2</option>
+            <option value="S3">S3</option>
+          </select>
+        </div>
+        <div className="flex flex-col pt-5">
+          <span className="text-2xl">Status:</span>
+          <select className="text-black text-xl" value={selectedStatus} onChange={handleStatusChange}>
+            <option value={0}>0</option>
+            <option value={1}>1</option>
+          </select>
+        </div>
+        <div className="flex flex-col pt-5">
+          <span className="text-2xl">Date:</span>
+          <input className="text-black text-xl" type="date" value={selectedDate} onChange={handleDateChange} />
+        </div>
+        <div className="flex flex-col pt-5">
+          <span className="text-2xl">Time:</span>
+          <input className="text-black text-xl" type="time" value={selectedTime} onChange={handleTimeChange} />
+        </div>
+        <div className="pt-10 w-full text-center">
+          <button className="border-2 rounded-md px-10 py-2 text-2xl" onClick={handleSubtmit}>
+            Submit
+          </button>
+        </div>
+    </div>
+  );
 };

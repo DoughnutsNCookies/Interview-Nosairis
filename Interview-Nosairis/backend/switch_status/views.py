@@ -5,6 +5,7 @@ from django.middleware.csrf import get_token
 from django.shortcuts import render
 from switch_status.helpers.generate_plot import generate_plot
 from switch_status.helpers.encode_image import encode_image
+from datetime import datetime
 import json
 
 # Create your views here.
@@ -18,7 +19,6 @@ def switch_status(request):
 	return render(request, 'switch_status/index.html')
 
 def read(request):
-		get_token(request)
 		statuses = Status.objects.values(
 			"id", "switch_label", "T1", "T2", "T3", "T4", "T5", "TS"
 		)
@@ -41,20 +41,25 @@ def read(request):
 
 def write(request):
 		data = json.loads(request.body)
-		Status.objects.create(
-				switch_label=data['switch_label'],
-				T1=data['T1'],
-				T2=data['T2'],
-				T3=data['T3'],
-				T4=data['T4'],
-				T5=data['T5'],
-				TS=data['TS']
+		statuses = Status.objects.values(
+			"id", "switch_label", "T1", "T2", "T3", "T4", "T5", "TS"
 		)
-		return JsonResponse(data)
+		if Status.objects.filter(switch_label=data['switch_label'], TS=data['TS']).exists():
+			return update(request)
+		else:
+			Status.objects.create(
+					switch_label=data['switch_label'],
+					T1=data['T1'],
+					T2=data['T2'],
+					T3=data['T3'],
+					T4=data['T4'],
+					T5=data['T5'],
+					TS=data['TS']
+			)
+			return JsonResponse(data)
 
 def update(request):
 		data = json.loads(request.body)
-		status_id = data['id']
 		updated_fields = {
 				'switch_label': data['switch_label'],
 				'T1': data['T1'],
@@ -64,5 +69,20 @@ def update(request):
 				'T5': data['T5'],
 				'TS': data['TS']
 		}
-		Status.objects.filter(id=status_id).update(**updated_fields)
+		Status.objects.filter(switch_label=data['switch_label'], TS=data['TS']).update(**updated_fields)
 		return JsonResponse(data)
+
+def alert(request):
+		if request.method == 'GET':
+				statuses = Status.objects.values(
+					"id", "switch_label", "T1", "T2", "T3", "T4", "T5", "TS"
+				)
+				output = []
+				for item in statuses:
+						t_values = [item["T1"], item["T2"], item["T3"], item["T4"], item["T5"]]
+						if any(t_values) == False:
+							output.append({
+								"switch_label": item["switch_label"],
+								"time": datetime.fromtimestamp(item["TS"]).strftime("%d/%m/%Y %H:%M")
+							})
+				return JsonResponse(output, safe=False)
