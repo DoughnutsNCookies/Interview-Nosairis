@@ -171,35 +171,36 @@ const Edits = () => {
 
   return (
     <div className="h-screen px-36">
-      <h1 className="text-center text-4xl py-10">Edit Page</h1>
-        <div className="flex flex-col">
-          <span className="text-2xl">Switch Label:</span>
-          <select className="text-black text-xl" value={selectedSwitch} onChange={handleSwitchChange}>
-            <option value="S1">S1</option>
-            <option value="S2">S2</option>
-            <option value="S3">S3</option>
-          </select>
-        </div>
-        <div className="flex flex-col pt-5">
-          <span className="text-2xl">Status:</span>
-          <select className="text-black text-xl" value={selectedStatus} onChange={handleStatusChange}>
-            <option value={0}>0</option>
-            <option value={1}>1</option>
-          </select>
-        </div>
-        <div className="flex flex-col pt-5">
-          <span className="text-2xl">Date:</span>
-          <input className="text-black text-xl" type="date" value={selectedDate} onChange={handleDateChange} />
-        </div>
-        <div className="flex flex-col pt-5">
-          <span className="text-2xl">Time:</span>
-          <input className="text-black text-xl" type="time" value={selectedTime} onChange={handleTimeChange} />
-        </div>
-        <div className="pt-10 w-full text-center">
-          <button className="border-2 rounded-md px-10 py-2 text-2xl" onClick={handleSubtmit}>
-            Submit
-          </button>
-        </div>
+      <h1 className="text-center text-4xl pt-10">Edit Page</h1>
+      <h2 className="text-center text-sm mx-12 pt-2 pb-10">If a match is found in the database (same switch label, date and time), status will update, else it would insert as new data</h2>
+      <div className="flex flex-col">
+        <span className="text-2xl">Switch Label:</span>
+        <select className="text-black text-xl" value={selectedSwitch} onChange={handleSwitchChange}>
+          <option value="S1">S1</option>
+          <option value="S2">S2</option>
+          <option value="S3">S3</option>
+        </select>
+      </div>
+      <div className="flex flex-col pt-5">
+        <span className="text-2xl">Date:</span>
+        <input className="text-black text-xl" type="date" value={selectedDate} onChange={handleDateChange} />
+      </div>
+      <div className="flex flex-col pt-5">
+        <span className="text-2xl">Time:</span>
+        <input className="text-black text-xl" type="time" value={selectedTime} onChange={handleTimeChange} />
+      </div>
+      <div className="flex flex-col pt-5">
+        <span className="text-2xl">Status:</span>
+        <select className="text-black text-xl" value={selectedStatus} onChange={handleStatusChange}>
+          <option value={0}>0</option>
+          <option value={1}>1</option>
+        </select>
+      </div>
+      <div className="pt-10 w-full text-center">
+        <button className="border-2 rounded-md px-10 py-2 text-2xl" onClick={handleSubtmit}>
+          Submit
+        </button>
+      </div>
     </div>
   );
 };
